@@ -47,13 +47,17 @@ function init() {
     context.fillStyle = backgroundGradient
     context.fillRect(0, 0, canvas.width, canvas.height)
 
-    grid = [(0, 0), (0, 2), (2, 0), (2, 2)]
+    // x and y coordinates for targets in grid
+    grid = [[0.3, 0.3], [0.5, 0.3], [0.6, 0.3],
+            [0.3, 0,5], [0.5, 0.5], [0.6, 0.5],
+            [0.3, 0.7], [0.5, 0.7], [0.6, 0.7]]
+
     targets = []
 
 
     for (let i = 0; i < 16; i++) {
-        const x = Math.random() * canvas.width
-        const y = Math.random() * canvas.height
+        const x = grid[i][0] * canvas.width
+        const y = grid[i][1] * canvas.height
         targets.push(new Target(x, y, "cyan"))
         targets[i].draw()
     }
