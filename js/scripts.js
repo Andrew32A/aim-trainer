@@ -39,7 +39,7 @@ backgroundGradient.addColorStop(1, "#3f586b")
 
 // object instantiation and animation
 let targets
-let grid // 4x4 grid
+let grid // 3x3 grid
 
 // object instantiation
 function init() {
@@ -47,17 +47,17 @@ function init() {
     context.fillStyle = backgroundGradient
     context.fillRect(0, 0, canvas.width, canvas.height)
 
-    // x and y coordinates for targets in grid
-    grid = [[0.3, 0.3], [0.5, 0.3], [0.6, 0.3],
-            [0.3, 0,5], [0.5, 0.5], [0.6, 0.5],
-            [0.3, 0.7], [0.5, 0.7], [0.6, 0.7]]
+    // x and y % coordinates for targets in grid
+    grid = [[0.3, 0.3], [0.5, 0.3], [0.7, 0.3],
+            [0.3, 0.5], [0.5, 0.5], [0.7, 0.5],
+            [0.3, 0.7], [0.5, 0.7], [0.7, 0.7]]
 
     targets = []
 
-
-    for (let i = 0; i < 16; i++) {
-        const x = grid[i][0] * canvas.width
-        const y = grid[i][1] * canvas.height
+    for (let i = 0; i < 9; i++) {
+        console.log(`${i}: ${grid[i][0]} ${grid[i][1]}`)
+        let x = grid[i][0] * canvas.width
+        let y = grid[i][1] * canvas.height
         targets.push(new Target(x, y, "cyan"))
         targets[i].draw()
     }
