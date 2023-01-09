@@ -12,24 +12,32 @@ addEventListener("resize", () => {
 })
 
 // objects
-function Target(x, y, color) {
-    this.x = x
-    this.y = y
-    this.radius = 25
-    this.color = color
-    this.status = "destroyed" // destroyed for hidden, active for showing
-}
+class Target {
+    constructor(x, y, color) {
+        this.x = x
+        this.y = y
+        this.radius = 25
+        this.color = color
+        this.status = "destroyed" // destroyed for hidden, active for showing
+    }
 
-Target.prototype.draw = function() {
-    context.save()
-    context.beginPath()
-    context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
-    context.fillStyle = this.color
-    context.shadowColor = "#e3eaef"
-    context.shadowBlur = 20
-    context.fill()
-    context.closePath()
-    context.restore()
+    targetClicked() {
+        console.log("something was clicked!")
+        this.color = "black"
+        this.draw()
+    }
+
+    draw() {
+        context.save()
+        context.beginPath()
+        context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
+        context.fillStyle = this.color
+        context.shadowColor = "#e3eaef"
+        context.shadowBlur = 20
+        context.fill()
+        context.closePath()
+        context.restore()
+    }
 }
 
 // create background
@@ -52,6 +60,7 @@ function init() {
             [0.3, 0.5], [0.5, 0.5], [0.7, 0.5],
             [0.3, 0.7], [0.5, 0.7], [0.7, 0.7]]
 
+    // stores target objects created
     targets = []
 
     for (let i = 0; i < 9; i++) {
@@ -61,7 +70,7 @@ function init() {
         targets.push(new Target(x, y, "cyan"))
         targets[i].draw()
     }
-
+    console.log(targets)
 }
 
 init()
