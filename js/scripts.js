@@ -24,7 +24,6 @@ class Target {
     // when target is clicked, do something
     behaviorOnClick() {
         this.isAlive = false
-        this.color = "none"
         spawnNext()
         // this.draw()
     }
@@ -52,6 +51,8 @@ class Target {
             context.beginPath()
             context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
             context.fillStyle = this.color
+            context.shadowColor = "#e3eaef"
+            context.shadowBlur = 5
             context.fill()
             context.closePath()
             context.restore()
@@ -79,7 +80,6 @@ function spawnNext() {
     
     else {
         nextItem.draw()
-        nextItem.color = "cyan"
         return nextItem.isAlive = true
     }
 }
