@@ -16,20 +16,21 @@ class Target {
     constructor(x, y, color) {
         this.x = x
         this.y = y
-        this.radius = 25
+        this.radius = 50
         this.color = color
-        this.isAlive = true // true = showing, false = hidden
+        this.isAlive = true // true == showing, false == hidden
     }
 
     // when target is clicked, do something
     behaviorOnClick() {
         this.isAlive = false
         this.color = "none"
-        this.draw()
+        spawnNext()
+        // this.draw()
     }
 
     // pythagorean theorem to calculate if mouse clicked inside the target
-    targetClicked(xInput, yInput) {
+    wasTargetClicked(xInput, yInput) {
         const distance = Math.sqrt(( (xInput - this.x) * (xInput - this.x) ) + ( (yInput - this.y) * (yInput - this.y) ))
         console.log(distance)
 
@@ -59,12 +60,27 @@ class Target {
         else {
             context.fillRect(0, 0, canvas.width, canvas.height)
             for (let i = 0; i < targets.length; i++) {
-                // wouldn't work without this conditional
                 if (targets[i].isAlive === true) {
                     targets[i].draw()
                 }
             }
         }
+    }
+}
+
+// spawns next target after one was destroyed
+function spawnNext() {
+    nextItem = targets[Math.floor(Math.random() * targets.length)]
+    console.log(nextItem)
+    if (nextItem.isAlive === true) {
+        // wooooooo, recursion!!
+        spawnNext()
+    }
+    
+    else {
+        nextItem.draw()
+        nextItem.color = "cyan"
+        return nextItem.isAlive = true
     }
 }
 
@@ -113,7 +129,7 @@ for (let i = 0; i < targets.length; i++) {
         const rect = canvas.getBoundingClientRect()
         const x = event.clientX - rect.left
         const y = event.clientY - rect.top
-        targets[i].targetClicked(x, y)
+        targets[i].wasTargetClicked(x, y)
         // console.log(`x: ${x} y: ${y}`)
         // console.log(targets[i].targetClicked(x, y))
     })
