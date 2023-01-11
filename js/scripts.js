@@ -4,6 +4,9 @@ const context = canvas.getContext("2d")
 canvas.width = innerWidth
 canvas.height = innerHeight
 
+let canvasLeft = canvas.offsetLeft + canvas.clientLeft
+let canvasTop = canvas.offsetTop + canvas.clientTop
+
 // if user resizes window, the canvas will adjust
 addEventListener("resize", () => {
     canvas.width = innerWidth
@@ -73,4 +76,25 @@ function init() {
     console.log(targets)
 }
 
+// init canvas display
 init()
+
+// click events
+// canvas.addEventListener("click", function(event) {
+//     let x = event.pageX - canvasLeft
+//     let y = event.pageY - canvasTop
+
+//     targets.forEach(function(item) {
+//         if (y > item.top && y < item.top + item.height && x > item.left && x < item.left + item.width) {
+//             console.log("click")
+//         }
+//     })
+// }, false)
+
+// canvas.addEventListener("mousemove", function(event) {
+//     if (targets.isPointInPath(targets[0], event.offsetX, event.offsetY)) {
+//         targets[0].fillStyle = "green"
+//     }
+// })
+
+canvas.onclick = function() {console.log("click")}
