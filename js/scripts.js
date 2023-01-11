@@ -24,30 +24,46 @@ class Target {
         this.status = "destroyed" // destroyed for hidden, active for showing
     }
 
+    // when target is clicked, do something
+    behaviorOnClick() {
+        this.color = "none"
+        this.drawDestroyed()
+    }
+
     // pythagorean theorem to calculate if mouse clicked inside the target
     targetClicked(xInput, yInput) {
         const distance = Math.sqrt(( (xInput - this.x) * (xInput - this.x) ) + ( (yInput - this.y) * (yInput - this.y) ))
         console.log(distance)
 
         if (distance < this.radius) {
+            this.behaviorOnClick()
             return true
         }
         
         else {
             return false
         }
-        // console.log("something was clicked!")
-        // this.color = "black"
-        // this.draw()
     }
 
-    draw() {
+    drawActive() {
         context.save()
         context.beginPath()
         context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
         context.fillStyle = this.color
         context.shadowColor = "#e3eaef"
         context.shadowBlur = 20
+        context.fill()
+        context.closePath()
+        context.restore()
+    }
+
+    drawDestroyed() {
+        context.save()
+        context.beginPath()
+        context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
+        context.fillStyle = "none"
+        context.shadowColor = "none"
+        context.shadowBlur = 0
         context.fill()
         context.closePath()
         context.restore()
@@ -82,7 +98,7 @@ function init() {
         let x = grid[i][0] * canvas.width
         let y = grid[i][1] * canvas.height
         targets.push(new Target(x, y, "cyan"))
-        targets[i].draw()
+        targets[i].drawActive()
     }
     console.log(targets)
 
@@ -94,12 +110,13 @@ function init() {
 init()
 
 // click events
-canvas.addEventListener("click", (event) => {
-    const rect = canvas.getBoundingClientRect()
-    const x = event.clientX - rect.left
-    const y = event.clientY - rect.top
-    console.log(`x: ${x} y: ${y}`)
-    console.log(targets[2].targetClicked(x, y))
-
-    targets[2].targetClicked(x, y)
-})
+for (let i = 0; i < 9; i++) {
+    canvas.addEventListener("click", (event) => {
+        const rect = canvas.getBoundingClientRect()
+        const x = event.clientX - rect.left
+        const y = event.clientY - rect.top
+        targets[i].targetClicked(x, y)
+        // console.log(`x: ${x} y: ${y}`)
+        // console.log(targets[i].targetClicked(x, y))
+    })
+}
