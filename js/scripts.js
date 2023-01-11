@@ -4,9 +4,6 @@ const context = canvas.getContext("2d")
 canvas.width = innerWidth
 canvas.height = innerHeight
 
-let canvasLeft = canvas.offsetLeft + canvas.clientLeft
-let canvasTop = canvas.offsetTop + canvas.clientTop
-
 // if user resizes window, the canvas will adjust
 addEventListener("resize", () => {
     canvas.width = innerWidth
@@ -21,13 +18,14 @@ class Target {
         this.y = y
         this.radius = 25
         this.color = color
-        this.status = "destroyed" // destroyed for hidden, active for showing
+        this.isAlive = true // true = showing, false = hidden
     }
 
     // when target is clicked, do something
     behaviorOnClick() {
+        this.isAlive = false
         this.color = "none"
-        this.drawDestroyed()
+        this.draw()
     }
 
     // pythagorean theorem to calculate if mouse clicked inside the target
@@ -35,38 +33,38 @@ class Target {
         const distance = Math.sqrt(( (xInput - this.x) * (xInput - this.x) ) + ( (yInput - this.y) * (yInput - this.y) ))
         console.log(distance)
 
+        // if target was clicked
         if (distance < this.radius) {
             this.behaviorOnClick()
             return true
         }
         
+        // if target was not clicked
         else {
             return false
         }
     }
 
-    drawActive() {
-        context.save()
-        context.beginPath()
-        context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
-        context.fillStyle = this.color
-        context.shadowColor = "#e3eaef"
-        context.shadowBlur = 20
-        context.fill()
-        context.closePath()
-        context.restore()
-    }
+    draw() {
+        if (this.isAlive === true) {
+            context.save()
+            context.beginPath()
+            context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
+            context.fillStyle = this.color
+            context.fill()
+            context.closePath()
+            context.restore()
+        }
 
-    drawDestroyed() {
-        context.save()
-        context.beginPath()
-        context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
-        context.fillStyle = "none"
-        context.shadowColor = "none"
-        context.shadowBlur = 0
-        context.fill()
-        context.closePath()
-        context.restore()
+        else {
+            context.fillRect(0, 0, canvas.width, canvas.height)
+            for (let i = 0; i < targets.length; i++) {
+                // wouldn't work without this conditional
+                if (targets[i].isAlive === true) {
+                    targets[i].draw()
+                }
+            }
+        }
     }
 }
 
@@ -98,7 +96,7 @@ function init() {
         let x = grid[i][0] * canvas.width
         let y = grid[i][1] * canvas.height
         targets.push(new Target(x, y, "cyan"))
-        targets[i].drawActive()
+        targets[i].draw()
     }
     console.log(targets)
 
@@ -110,7 +108,7 @@ function init() {
 init()
 
 // click events
-for (let i = 0; i < 9; i++) {
+for (let i = 0; i < targets.length; i++) {
     canvas.addEventListener("click", (event) => {
         const rect = canvas.getBoundingClientRect()
         const x = event.clientX - rect.left
