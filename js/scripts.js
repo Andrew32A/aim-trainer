@@ -24,10 +24,21 @@ class Target {
         this.status = "destroyed" // destroyed for hidden, active for showing
     }
 
-    targetClicked() {
-        console.log("something was clicked!")
-        this.color = "black"
-        this.draw()
+    // pythagorean theorem to calculate if mouse clicked inside the target
+    targetClicked(xInput, yInput) {
+        const distance = Math.sqrt(( (xInput - this.x) * (xInput - this.x) ) + ( (yInput - this.y) * (yInput - this.y) ))
+        console.log(distance)
+
+        if (distance < this.radius) {
+            return true
+        }
+        
+        else {
+            return false
+        }
+        // console.log("something was clicked!")
+        // this.color = "black"
+        // this.draw()
     }
 
     draw() {
@@ -74,27 +85,21 @@ function init() {
         targets[i].draw()
     }
     console.log(targets)
+
+    // return might not be needed, test without it when event listeners work
+    return targets
 }
 
 // init canvas display
 init()
 
 // click events
-// canvas.addEventListener("click", function(event) {
-//     let x = event.pageX - canvasLeft
-//     let y = event.pageY - canvasTop
+canvas.addEventListener("click", (event) => {
+    const rect = canvas.getBoundingClientRect()
+    const x = event.clientX - rect.left
+    const y = event.clientY - rect.top
+    console.log(`x: ${x} y: ${y}`)
+    console.log(targets[2].targetClicked(x, y))
 
-//     targets.forEach(function(item) {
-//         if (y > item.top && y < item.top + item.height && x > item.left && x < item.left + item.width) {
-//             console.log("click")
-//         }
-//     })
-// }, false)
-
-// canvas.addEventListener("mousemove", function(event) {
-//     if (targets.isPointInPath(targets[0], event.offsetX, event.offsetY)) {
-//         targets[0].fillStyle = "green"
-//     }
-// })
-
-canvas.onclick = function() {console.log("click")}
+    targets[2].targetClicked(x, y)
+})
