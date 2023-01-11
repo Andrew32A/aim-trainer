@@ -13,12 +13,12 @@ addEventListener("resize", () => {
 
 // objects
 class Target {
-    constructor(x, y, color) {
+    constructor(x, y, color, isAlive) {
         this.x = x
         this.y = y
         this.radius = 50
         this.color = color
-        this.isAlive = true // true == showing, false == hidden
+        this.isAlive = isAlive // true == showing, false == hidden
     }
 
     // when target is clicked, do something
@@ -108,11 +108,22 @@ function init() {
     targets = []
 
     for (let i = 0; i < 9; i++) {
-        console.log(`${i}: ${grid[i][0]} ${grid[i][1]}`)
-        let x = grid[i][0] * canvas.width
-        let y = grid[i][1] * canvas.height
-        targets.push(new Target(x, y, "cyan"))
-        targets[i].draw()
+        // TODO: doesn't respawn next on first click (feature not a bug?)
+        if (i === 3 || i === 4 || i === 5) {
+            console.log(`${i}: ${grid[i][0]} ${grid[i][1]}`)
+            let x = grid[i][0] * canvas.width
+            let y = grid[i][1] * canvas.height
+            targets.push(new Target(x, y, "cyan", true))
+            targets[i].draw()
+        }
+
+        else {
+            console.log(`${i}: ${grid[i][0]} ${grid[i][1]}`)
+            let x = grid[i][0] * canvas.width
+            let y = grid[i][1] * canvas.height
+            targets.push(new Target(x, y, "cyan", false))
+            targets[i].draw()
+        }
     }
     console.log(targets)
 
