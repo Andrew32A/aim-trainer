@@ -21,29 +21,21 @@ class Target {
         this.isAlive = isAlive // true == showing, false == hidden
     }
 
-    // when target is clicked, do something
-    behaviorOnClick() {
-        this.isAlive = false
-        spawnNext()
-        // this.draw()
-    }
-
     // pythagorean theorem to calculate if mouse clicked inside the target
     wasTargetClicked(xInput, yInput) {
         const distance = Math.sqrt(( (xInput - this.x) * (xInput - this.x) ) + ( (yInput - this.y) * (yInput - this.y) ))
         console.log(distance)
 
         // if target was clicked
-        if (this.isAlive === true) {
-            if (distance < this.radius) {
-                this.behaviorOnClick()
-                return true
-            }
-            
-            // if target was not clicked
-            else {
-                return false
-            }
+        if (distance < this.radius && this.isAlive === true) {
+            this.isAlive = false
+            spawnNext()
+            return true
+        }
+        
+        // if target was not clicked
+        else {
+            return false
         }
     }
 
@@ -91,11 +83,11 @@ const backgroundGradient = context.createLinearGradient(0, 0, 0, canvas.height)
 backgroundGradient.addColorStop(0, "#171e26")
 backgroundGradient.addColorStop(1, "#3f586b")
 
-// object instantiation and animation
+// variables that hold array of targets and coordinates
 let targets
 let grid // 3x3 grid
 
-// object instantiation
+// loads and displays fill background and object instantiation
 function init() {
     // draw background
     context.fillStyle = backgroundGradient
@@ -128,9 +120,6 @@ function init() {
         }
     }
     console.log(targets)
-
-    // return might not be needed, test without it when event listeners work
-    return targets
 }
 
 // init canvas display
@@ -147,3 +136,4 @@ for (let i = 0; i < targets.length; i++) {
         // console.log(targets[i].targetClicked(x, y))
     })
 }
+
