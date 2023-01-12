@@ -34,14 +34,16 @@ class Target {
         console.log(distance)
 
         // if target was clicked
-        if (distance < this.radius) {
-            this.behaviorOnClick()
-            return true
-        }
-        
-        // if target was not clicked
-        else {
-            return false
+        if (this.isAlive === true) {
+            if (distance < this.radius) {
+                this.behaviorOnClick()
+                return true
+            }
+            
+            // if target was not clicked
+            else {
+                return false
+            }
         }
     }
 
