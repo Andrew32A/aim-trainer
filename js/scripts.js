@@ -28,8 +28,9 @@ class Target {
 
         // if target was clicked
         if (distance < this.radius && this.isAlive === true) {
-            this.isAlive = false
             spawnNext()
+            this.isAlive = false
+            this.draw()
             return true
         }
         
@@ -73,8 +74,7 @@ function spawnNext() {
     }
     
     else {
-        nextItem.draw()
-        return nextItem.isAlive = true
+        nextItem.isAlive = true
     }
 }
 
