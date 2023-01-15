@@ -47,12 +47,11 @@ class Target {
     }
 }
 
-let particleRadius = Math.random() * 3
 class Particle {
     constructor(x, y) {
         this.x = x
         this.y = y
-        this.radius = particleRadius
+        this.radius = 2
         this.color = "white"
         this.gravity = 0.1
         this.ttl = 100 // time to live
@@ -154,11 +153,11 @@ function draw() {
     })
 
     // console table is super cool! great way to visualize data in console without the clutter
-    console.table(particles)
+    // console.table(particles)
     // console.table(targets)
 }
 
-// variables that hold array of targets and coordinates
+// variables that hold array of targets, coordinates, and particles
 let targets
 let grid // 3x3 grid
 let particles
