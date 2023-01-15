@@ -32,7 +32,6 @@ class Target {
             spawnNext()
             this.isAlive = false
             this.shatter()
-            // draw()
             return true
         } else { 
             // if target was not clicked
@@ -40,6 +39,7 @@ class Target {
         }
     }
 
+    // spawns 8 particles starting from center of target
     shatter() {
         for (let i = 0; i < 8; i++) {
             particles.push(new Particle(this.x, this.y, 2))
@@ -73,14 +73,7 @@ class Particle {
 
     updateParticle() {
         this.drawParticle()
-
-        // when the particle hits the bottom of the screen, the star moves upwards
-        // if (this.y + this.radius + this.velocity.y > canvas.height - groundHeight) {
-        //     this.velocity.y = -this.velocity.y * this.friction
-        // } else {
-            this.velocity.y += this.gravity
-        // }
-
+        this.velocity.y += this.gravity
         this.x += this.velocity.x
         this.y += this.velocity.y
         this.ttl -= 1
@@ -151,10 +144,6 @@ function draw() {
             particles.splice(index, 1)
         }
     })
-
-    // console table is super cool! great way to visualize data in console without the clutter
-    // console.table(particles)
-    // console.table(targets)
 }
 
 // variables that hold array of targets, coordinates, and particles
@@ -189,6 +178,7 @@ function init() {
     }
     draw()
     console.log(targets)
+    console.table(targets) // console table is super cool! great way to visualize data in console without the clutter
 }
 
 // init canvas display
