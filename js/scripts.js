@@ -11,7 +11,7 @@ addEventListener("resize", () => {
     init()
 })
 
-// objects
+// target blueprint
 class Target {
     constructor(x, y, color, isAlive) {
         this.x = x
@@ -47,6 +47,7 @@ class Target {
     }
 }
 
+// particle blueprint
 class Particle {
     constructor(x, y) {
         this.x = x
@@ -59,6 +60,7 @@ class Particle {
         this.velocity = {x: randomIntFromRange(-5, 5), y: randomIntFromRange(-15, 15)}
     }
 
+    // displays particle
     drawParticle() {
         context.save()
         context.beginPath()
@@ -71,6 +73,7 @@ class Particle {
         context.restore()
     }
 
+    // updates particle
     updateParticle() {
         this.drawParticle()
         this.velocity.y += this.gravity
@@ -81,6 +84,7 @@ class Particle {
     }
 }
 
+// displays targets
 function drawTargets() {
     for (i = 0; i < targets.length; i++) {
         if (targets[i].isAlive === true) {
