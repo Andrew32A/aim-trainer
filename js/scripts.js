@@ -28,9 +28,10 @@ class Target {
 
         // if target was clicked
         if (distance < this.radius && this.isAlive === true) {
+            score++
             spawnNext()
             this.isAlive = false
-            this.draw()
+            draw()
             return true
         }
         
@@ -39,27 +40,20 @@ class Target {
             return false
         }
     }
+}
 
-    draw() {
-        if (this.isAlive === true) {
+function drawTargets() {
+    for (i = 0; i < targets.length; i++) {
+        if (targets[i].isAlive === true) {
             context.save()
             context.beginPath()
-            context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
-            context.fillStyle = this.color
+            context.arc(targets[i].x, targets[i].y, targets[i].radius, 0, Math.PI * 2, false)
+            context.fillStyle = targets[i].color
             context.shadowColor = "#e3eaef"
             context.shadowBlur = 5
             context.fill()
             context.closePath()
             context.restore()
-        }
-
-        else {
-            context.fillRect(0, 0, canvas.width, canvas.height)
-            for (let i = 0; i < targets.length; i++) {
-                if (targets[i].isAlive === true) {
-                    targets[i].draw()
-                }
-            }
         }
     }
 }
@@ -78,10 +72,30 @@ function spawnNext() {
     }
 }
 
-// create background
+// displays scoreboard
+let score = 0
+function drawScore() {
+    context.font = "16px Arial"
+    context.fillStyle = "cyan"
+    context.textAlign = "center"
+    context.fillText(`Score: ${score}`, canvas.width / 2, 85)
+}
+
+// displays background
 const backgroundGradient = context.createLinearGradient(0, 0, 0, canvas.height)
-backgroundGradient.addColorStop(0, "#171e26")
-backgroundGradient.addColorStop(1, "#3f586b")
+function drawBackground() {
+    backgroundGradient.addColorStop(0, "#171e26")
+    backgroundGradient.addColorStop(1, "#3f586b")
+    context.fillStyle = backgroundGradient
+    context.fillRect(0, 0, canvas.width, canvas.height)
+}
+
+// display everything on canvas
+function draw() {
+    drawBackground()
+    drawTargets()
+    drawScore()
+}
 
 // variables that hold array of targets and coordinates
 let targets
@@ -89,10 +103,6 @@ let grid // 3x3 grid
 
 // loads and displays fill background and object instantiation
 function init() {
-    // draw background
-    context.fillStyle = backgroundGradient
-    context.fillRect(0, 0, canvas.width, canvas.height)
-
     // x and y % coordinates for targets in grid
     grid = [[0.3, 0.3], [0.5, 0.3], [0.7, 0.3],
             [0.3, 0.5], [0.5, 0.5], [0.7, 0.5],
@@ -102,13 +112,12 @@ function init() {
     targets = []
 
     for (let i = 0; i < 9; i++) {
-        // TODO: doesn't respawn next on first click (feature not a bug?)
         if (i === 3 || i === 4 || i === 5) {
             console.log(`${i}: ${grid[i][0]} ${grid[i][1]}`)
             let x = grid[i][0] * canvas.width
             let y = grid[i][1] * canvas.height
             targets.push(new Target(x, y, "cyan", true))
-            targets[i].draw()
+            // targets[i].drawTargets()
         }
 
         else {
@@ -116,9 +125,10 @@ function init() {
             let x = grid[i][0] * canvas.width
             let y = grid[i][1] * canvas.height
             targets.push(new Target(x, y, "cyan", false))
-            targets[i].draw()
+            // targets[i].drawTargets()
         }
     }
+    draw()
     console.log(targets)
 }
 
@@ -136,4 +146,3 @@ for (let i = 0; i < targets.length; i++) {
         // console.log(targets[i].targetClicked(x, y))
     })
 }
-
