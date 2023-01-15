@@ -42,10 +42,11 @@ class Target {
     // spawns 8 particles starting from center of target
     shatter() {
         for (let i = 0; i < 8; i++) {
-            particles.push(new Particle(this.x, this.y, 2))
+            particles.push(new Particle(this.x, this.y))
         }
 
         points.push(new Points(this.x, this.y))
+        console.table(points)
     }
 }
 
@@ -102,7 +103,7 @@ class Points {
         context.beginPath()
         context.fillText(`+10`, this.x, this.y)
         context.font = "16px Arial"
-        context.fillStyle = `cyan, ${this.opacity}` // TODO: fix opacity and ttl
+        context.fillStyle = `cyan, ${this.opacity}` // TODO: fix opacity
         context.closePath()
         context.restore()
     }
@@ -186,7 +187,7 @@ function draw() {
     points.forEach((item, index) => {
         item.updatePoints()
         if (item.ttl === 0) {
-            particles.splice(index, 1)
+            points.splice(index, 1)
         }
     })
 }
@@ -207,7 +208,7 @@ function init() {
             [0.3, 0.5], [0.5, 0.5], [0.7, 0.5],
             [0.3, 0.7], [0.5, 0.7], [0.7, 0.7]]
 
-    // stores target and particle objects created
+    // resets arrays
     targets = []
     particles = []
     points = []
