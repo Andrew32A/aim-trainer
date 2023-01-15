@@ -24,7 +24,7 @@ class Target {
     // pythagorean theorem to calculate if mouse clicked inside the target
     wasTargetClicked(xInput, yInput) {
         const distance = Math.sqrt(( (xInput - this.x) * (xInput - this.x) ) + ( (yInput - this.y) * (yInput - this.y) ))
-        console.log(distance)
+        // console.log(distance) // uncomment this to see specific coordinates in console
 
         // if target was clicked
         if (distance < this.radius && this.isAlive === true) {
@@ -33,10 +33,8 @@ class Target {
             this.isAlive = false
             draw()
             return true
-        }
-        
-        // if target was not clicked
-        else {
+        } else { 
+            // if target was not clicked
             return false
         }
     }
@@ -61,13 +59,10 @@ function drawTargets() {
 // spawns next target after one was destroyed
 function spawnNext() {
     nextItem = targets[Math.floor(Math.random() * targets.length)]
-    console.log(nextItem)
     if (nextItem.isAlive === true) {
         // wooooooo, recursion!!
         spawnNext()
-    }
-    
-    else {
+    } else {
         nextItem.isAlive = true
     }
 }
@@ -95,6 +90,8 @@ function draw() {
     drawBackground()
     drawTargets()
     drawScore()
+    // console table is super cool! great way to visualize data in console without the clutter
+    console.table(targets)
 }
 
 // variables that hold array of targets and coordinates
@@ -103,6 +100,9 @@ let grid // 3x3 grid
 
 // loads and displays fill background and object instantiation
 function init() {
+    // reset score
+    score = 0
+
     // x and y % coordinates for targets in grid
     grid = [[0.3, 0.3], [0.5, 0.3], [0.7, 0.3],
             [0.3, 0.5], [0.5, 0.5], [0.7, 0.5],
@@ -112,20 +112,14 @@ function init() {
     targets = []
 
     for (let i = 0; i < 9; i++) {
-        if (i === 3 || i === 4 || i === 5) {
-            console.log(`${i}: ${grid[i][0]} ${grid[i][1]}`)
-            let x = grid[i][0] * canvas.width
-            let y = grid[i][1] * canvas.height
-            targets.push(new Target(x, y, "cyan", true))
-            // targets[i].drawTargets()
-        }
+        console.log(`${i}: ${grid[i][0]} ${grid[i][1]}`)
+        let x = grid[i][0] * canvas.width
+        let y = grid[i][1] * canvas.height
 
-        else {
-            console.log(`${i}: ${grid[i][0]} ${grid[i][1]}`)
-            let x = grid[i][0] * canvas.width
-            let y = grid[i][1] * canvas.height
+        if (i === 3 || i === 4 || i === 5) {
+            targets.push(new Target(x, y, "cyan", true))
+        } else {
             targets.push(new Target(x, y, "cyan", false))
-            // targets[i].drawTargets()
         }
     }
     draw()
@@ -142,7 +136,5 @@ for (let i = 0; i < targets.length; i++) {
         const x = event.clientX - rect.left
         const y = event.clientY - rect.top
         targets[i].wasTargetClicked(x, y)
-        // console.log(`x: ${x} y: ${y}`)
-        // console.log(targets[i].targetClicked(x, y))
     })
 }
