@@ -31,12 +31,61 @@ class Target {
             score++
             spawnNext()
             this.isAlive = false
-            draw()
+            this.shatter()
+            // draw()
             return true
         } else { 
             // if target was not clicked
             return false
         }
+    }
+
+    shatter() {
+        for (let i = 0; i < 8; i++) {
+            particles.push(new Particle(this.x, this.y, 2))
+        }
+    }
+}
+
+let particleRadius = Math.random() * 3
+class Particle {
+    constructor(x, y) {
+        this.x = x
+        this.y = y
+        this.radius = particleRadius
+        this.color = "white"
+        this.gravity = 0.1
+        this.ttl = 100 // time to live
+        this.opacity = 1
+        this.velocity = {x: randomIntFromRange(-5, 5), y: randomIntFromRange(-15, 15)}
+    }
+
+    drawParticle() {
+        context.save()
+        context.beginPath()
+        context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
+        context.fillStyle = `rgba(227, 234, 239, ${this.opacity})`
+        context.shadowColor = "#e3eaef"
+        context.shadowBlur = 20
+        context.fill()
+        context.closePath()
+        context.restore()
+    }
+
+    updateParticle() {
+        this.drawParticle()
+
+        // when the particle hits the bottom of the screen, the star moves upwards
+        // if (this.y + this.radius + this.velocity.y > canvas.height - groundHeight) {
+        //     this.velocity.y = -this.velocity.y * this.friction
+        // } else {
+            this.velocity.y += this.gravity
+        // }
+
+        this.x += this.velocity.x
+        this.y += this.velocity.y
+        this.ttl -= 1
+        this.opacity -= 1 / this.ttl
     }
 }
 
@@ -67,6 +116,11 @@ function spawnNext() {
     }
 }
 
+// helper function for random int
+function randomIntFromRange(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
 // displays scoreboard
 let score = 0
 function drawScore() {
@@ -87,16 +141,27 @@ function drawBackground() {
 
 // display everything on canvas
 function draw() {
+    requestAnimationFrame(draw)
     drawBackground()
     drawTargets()
     drawScore()
+
+    particles.forEach((item, index) => {
+        item.updateParticle()
+        if (item.ttl === 0) {
+            particles.splice(index, 1)
+        }
+    })
+
     // console table is super cool! great way to visualize data in console without the clutter
-    console.table(targets)
+    console.table(particles)
+    // console.table(targets)
 }
 
 // variables that hold array of targets and coordinates
 let targets
 let grid // 3x3 grid
+let particles
 
 // loads and displays fill background and object instantiation
 function init() {
@@ -108,8 +173,9 @@ function init() {
             [0.3, 0.5], [0.5, 0.5], [0.7, 0.5],
             [0.3, 0.7], [0.5, 0.7], [0.7, 0.7]]
 
-    // stores target objects created
+    // stores target and particle objects created
     targets = []
+    particles = []
 
     for (let i = 0; i < 9; i++) {
         console.log(`${i}: ${grid[i][0]} ${grid[i][1]}`)
