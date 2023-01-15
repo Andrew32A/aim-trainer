@@ -28,7 +28,7 @@ class Target {
 
         // if target was clicked
         if (distance < this.radius && this.isAlive === true) {
-            score++
+            score += 10
             spawnNext()
             this.isAlive = false
             this.shatter()
@@ -44,6 +44,8 @@ class Target {
         for (let i = 0; i < 8; i++) {
             particles.push(new Particle(this.x, this.y, 2))
         }
+
+        points.push(new Points(this.x, this.y))
     }
 }
 
@@ -76,6 +78,38 @@ class Particle {
     // updates particle
     updateParticle() {
         this.drawParticle()
+        this.velocity.y += this.gravity
+        this.x += this.velocity.x
+        this.y += this.velocity.y
+        this.ttl -= 1
+        this.opacity -= 1 / this.ttl
+    }
+}
+
+class Points {
+    constructor(x, y) {
+        this.x = x
+        this.y = y
+        this.color = "cyan"
+        this.gravity = 0.1
+        this.ttl = 100
+        this.opacity = 1
+        this.velocity = {x: randomIntFromRange(-5, 5), y: randomIntFromRange(-8, -5)}
+    }
+
+    drawPoints() {
+        context.save()
+        context.beginPath()
+        context.fillText(`+10`, this.x, this.y)
+        context.font = "16px Arial"
+        context.fillStyle = `cyan, ${this.opacity}` // TODO: fix opacity and ttl
+        context.closePath()
+        context.restore()
+    }
+
+    // updates particle
+    updatePoints() {
+        this.drawPoints()
         this.velocity.y += this.gravity
         this.x += this.velocity.x
         this.y += this.velocity.y
@@ -148,12 +182,20 @@ function draw() {
             particles.splice(index, 1)
         }
     })
+
+    points.forEach((item, index) => {
+        item.updatePoints()
+        if (item.ttl === 0) {
+            particles.splice(index, 1)
+        }
+    })
 }
 
-// variables that hold array of targets, coordinates, and particles
+// variables that hold array of targets, coordinates, particles, and points
 let targets
 let grid // 3x3 grid
 let particles
+let points // points that fly off of target when destroyed
 
 // loads and displays fill background and object instantiation
 function init() {
@@ -168,6 +210,7 @@ function init() {
     // stores target and particle objects created
     targets = []
     particles = []
+    points = []
 
     for (let i = 0; i < 9; i++) {
         console.log(`${i}: ${grid[i][0]} ${grid[i][1]}`)
