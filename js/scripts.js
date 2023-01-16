@@ -87,35 +87,35 @@ class Particle {
     }
 }
 
+// points blueprint
 class Points {
     constructor(x, y) {
         this.x = x
         this.y = y
         this.color = "cyan"
         this.gravity = 0.1
-        this.ttl = 100
-        this.opacity = 1
+        this.ttl = 500
         this.velocity = {x: randomIntFromRange(-5, 5), y: randomIntFromRange(-8, -5)}
     }
 
+    // displays points
     drawPoints() {
         context.save()
         context.beginPath()
         context.fillText(`+10`, this.x, this.y)
         context.font = "16px Arial"
-        context.fillStyle = `cyan, ${this.opacity}` // TODO: fix opacity
+        context.fillStyle = "cyan"
         context.closePath()
         context.restore()
     }
 
-    // updates particle
+    // updates points
     updatePoints() {
         this.drawPoints()
         this.velocity.y += this.gravity
         this.x += this.velocity.x
         this.y += this.velocity.y
         this.ttl -= 1
-        this.opacity -= 1 / this.ttl
     }
 }
 
@@ -203,15 +203,15 @@ function init() {
     // reset score
     score = 0
 
-    // x and y % coordinates for targets in grid
-    grid = [[0.3, 0.3], [0.5, 0.3], [0.7, 0.3],
-            [0.3, 0.5], [0.5, 0.5], [0.7, 0.5],
-            [0.3, 0.7], [0.5, 0.7], [0.7, 0.7]]
-
     // resets arrays
     targets = []
     particles = []
     points = []
+
+    // x and y % coordinates for targets in grid
+    grid = [[0.3, 0.3], [0.5, 0.3], [0.7, 0.3],
+            [0.3, 0.5], [0.5, 0.5], [0.7, 0.5],
+            [0.3, 0.7], [0.5, 0.7], [0.7, 0.7]]
 
     for (let i = 0; i < 9; i++) {
         console.log(`${i}: ${grid[i][0]} ${grid[i][1]}`)
