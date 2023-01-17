@@ -170,26 +170,27 @@ function drawBackground() {
     context.fillRect(0, 0, canvas.width, canvas.height)
 }
 
-// display everything on canvas
+// displays everything on canvas
 function draw() {
-    requestAnimationFrame(draw)
     drawBackground()
     drawTargets()
     drawScore()
-
+    
     particles.forEach((item, index) => {
         item.updateParticle()
         if (item.ttl === 0) {
             particles.splice(index, 1)
         }
     })
-
+    
     points.forEach((item, index) => {
         item.updatePoints()
         if (item.ttl === 0) {
             points.splice(index, 1)
         }
     })
+    
+    requestAnimationFrame(draw)
 }
 
 // variables that hold array of targets, coordinates, particles, and points
@@ -224,13 +225,13 @@ function init() {
             targets.push(new Target(x, y, "cyan", false))
         }
     }
-    draw()
     console.log(targets)
     console.table(targets) // console table is super cool! great way to visualize data in console without the clutter
 }
 
 // init canvas display
 init()
+draw()
 
 // click events
 for (let i = 0; i < targets.length; i++) {
