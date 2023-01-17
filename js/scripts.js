@@ -24,7 +24,7 @@ class Target {
     // pythagorean theorem to calculate if mouse clicked inside the target
     wasTargetClicked(xInput, yInput) {
         const distance = Math.sqrt(( (xInput - this.x) * (xInput - this.x) ) + ( (yInput - this.y) * (yInput - this.y) ))
-        // console.log(distance) // uncomment this to see specific coordinates in console
+        // console.log(distance) // uncomment this to see coordinates in console
 
         // if target was clicked
         if (distance < this.radius && this.isAlive === true) {
@@ -94,7 +94,8 @@ class Points {
         this.y = y
         this.color = "cyan"
         this.gravity = 0.1
-        this.ttl = 500
+        this.ttl = 100
+        this.opacity = 1
         this.velocity = {x: randomIntFromRange(-5, 5), y: randomIntFromRange(-8, -5)}
     }
 
@@ -102,9 +103,9 @@ class Points {
     drawPoints() {
         context.save()
         context.beginPath()
+        context.fillStyle = `rgba(227, 234, 239, ${this.opacity})`
         context.fillText(`+10`, this.x, this.y)
         context.font = "16px Arial"
-        context.fillStyle = "cyan"
         context.closePath()
         context.restore()
     }
@@ -116,6 +117,7 @@ class Points {
         this.x += this.velocity.x
         this.y += this.velocity.y
         this.ttl -= 1
+        this.opacity -= 1 / this.ttl
     }
 }
 
@@ -189,7 +191,7 @@ function draw() {
             points.splice(index, 1)
         }
     })
-    
+
     requestAnimationFrame(draw)
 }
 
@@ -199,7 +201,7 @@ let grid // 3x3 grid
 let particles
 let points // points that fly off of target when destroyed
 
-// loads and displays fill background and object instantiation
+// loads and displays initial objects
 function init() {
     // reset score
     score = 0
