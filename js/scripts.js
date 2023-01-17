@@ -45,7 +45,7 @@ class Target {
             particles.push(new Particle(this.x, this.y))
         }
 
-        points.push(new Points(this.x, this.y))
+        points.push(new Point(this.x, this.y))
         console.table(points)
     }
 }
@@ -87,32 +87,32 @@ class Particle {
     }
 }
 
-// points blueprint
-class Points {
+// point blueprint
+class Point {
     constructor(x, y) {
         this.x = x
         this.y = y
         this.color = "cyan"
         this.gravity = 0.1
-        this.ttl = 100
+        this.ttl = 150
         this.opacity = 1
         this.velocity = {x: randomIntFromRange(-5, 5), y: randomIntFromRange(-8, -5)}
     }
 
-    // displays points
-    drawPoints() {
+    // displays point
+    drawPoint() {
         context.save()
         context.beginPath()
-        context.fillStyle = `rgba(227, 234, 239, ${this.opacity})`
+        context.fillStyle = `rgba(0, 256, 256, ${this.opacity})`
         context.fillText(`+10`, this.x, this.y)
         context.font = "16px Arial"
         context.closePath()
         context.restore()
     }
 
-    // updates points
-    updatePoints() {
-        this.drawPoints()
+    // updates point
+    updatePoint() {
+        this.drawPoint()
         this.velocity.y += this.gravity
         this.x += this.velocity.x
         this.y += this.velocity.y
@@ -186,7 +186,7 @@ function draw() {
     })
     
     points.forEach((item, index) => {
-        item.updatePoints()
+        item.updatePoint()
         if (item.ttl === 0) {
             points.splice(index, 1)
         }
