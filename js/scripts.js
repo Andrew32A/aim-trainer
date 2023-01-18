@@ -96,16 +96,17 @@ class Point {
         this.gravity = 0.1
         this.ttl = 150
         this.opacity = 1
-        this.velocity = {x: randomIntFromRange(-5, 5), y: randomIntFromRange(-8, -5)}
+        this.velocity = {x: 0, y: -5}
     }
 
     // displays point
     drawPoint() {
         context.save()
         context.beginPath()
+        context.font = "16px Arial"
+        context.textAlign = "center"
         context.fillStyle = `rgba(0, 256, 256, ${this.opacity})`
         context.fillText(`+10`, this.x, this.y)
-        context.font = "16px Arial"
         context.closePath()
         context.restore()
     }
@@ -157,10 +158,12 @@ function randomIntFromRange(min, max) {
 // displays scoreboard
 let score = 0
 function drawScore() {
-    context.font = "16px Arial"
+    context.save()
+    context.font = "28px Arial"
     context.fillStyle = "cyan"
     context.textAlign = "center"
     context.fillText(`Score: ${score}`, canvas.width / 2, 85)
+    context.restore()
 }
 
 // displays background
