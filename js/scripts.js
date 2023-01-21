@@ -13,10 +13,10 @@ addEventListener("resize", () => {
 
 // target blueprint
 class Target {
-    constructor(x, y, color, isAlive) {
+    constructor(x, y, color, radius, isAlive) {
         this.x = x
         this.y = y
-        this.radius = 50
+        this.radius = radius
         this.color = color
         this.isAlive = isAlive // true == showing, false == hidden
     }
@@ -223,11 +223,12 @@ function init() {
         console.log(`${i}: ${grid[i][0]} ${grid[i][1]}`)
         let x = grid[i][0] * canvas.width
         let y = grid[i][1] * canvas.height
+        let radius = canvas.height / 20
 
         if (i === 3 || i === 4 || i === 5) {
-            targets.push(new Target(x, y, "cyan", true))
+            targets.push(new Target(x, y, "cyan", radius, true))
         } else {
-            targets.push(new Target(x, y, "cyan", false))
+            targets.push(new Target(x, y, "cyan", radius, false))
         }
     }
     console.log(targets)
